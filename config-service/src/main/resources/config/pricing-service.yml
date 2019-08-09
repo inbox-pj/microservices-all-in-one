@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/SHOPPING_DB?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: pjaiswal
+    password: 10PJ1980au#
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      max-wait: 20000 
+      max-active: 50
+      max-idle: 20
+      min-idle: 15
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect  
+        format_sql: true 
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+logging:
+#  pattern: 
+#    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.usl.microservices: DEBUG    
+
+redis:
+  server: 
+    host: localhost
+    port: 6379
+        
+greeting:
+  message:  Pricing Service - default

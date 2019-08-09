@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: admin-server
+  cloud:
+    config:
+      enabled: true
+      uri: ${CONFIG_SERVER_URL:http://localhost:8100}
+    discovery:
+      client:
+        simple:
+          instances:
+            discovery-service:
+              - uri: ${DISCOVERY_SERVER_URL:http://localhost:8200}
+                metadata:
+                  management.context-path: /actuator
+            config-service:
+              - uri: ${CONFIG_SERVER_URL:http://localhost:8100}
+                metadata:
+                  management.context-path: /actuator
+            hystrix-dashboard:
+              - uri: ${HYSTRIX_SERVER_URL:http://localhost:8400}
+                metadata:
+                  management.context-path: /actuator  
+            zipkin-server:
+              - uri: ${ZIPKIN_SERVER_URL:http://localhost:9411}
+                metadata:
+                  management.context-path: /actuator                    
+  boot:
+    admin:
+      discovery:
+        ignored-services: admin-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    restart:
+      enabled: true
+

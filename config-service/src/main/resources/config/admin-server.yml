@@ -1,0 +1,5 @@
+spring:
+  boot:
+    admin:
+      ui:
+        title: Shopping Cart Administrative Consol

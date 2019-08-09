@@ -1,0 +1,22 @@
+server:
+  port: ${CONFIG_SERVER_PORT:8100}
+  
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-service
+      server:
+        encrypt:
+          enabled: false
+        native:
+          search-locations: classpath:/config
+
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.usl.microservices: DEBUG 

@@ -1,0 +1,21 @@
+server:
+  port: ${HYSTRIX_SERVER_PORT:8400}
+  
+spring:
+  profiles:
+    active: default
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl: 
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8200}/eureka/
+
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.usl.microservices: DEBUG 

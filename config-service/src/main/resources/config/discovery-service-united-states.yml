@@ -1,0 +1,21 @@
+server:
+  port: 8201
+  
+spring:
+  profiles:
+    active: united-states
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8100
+               
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl: 
+      defaultZone: http://eureka-server-fr-com:8202/eureka/
+  server:
+     wait-time-in-ms-when-sync-empty: 5
+  instance:
+    hostname: eureka-server-us-com

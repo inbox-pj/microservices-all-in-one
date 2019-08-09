@@ -1,0 +1,12 @@
+server:
+  port: ${ADMIN_SERVER_PORT:8300}
+
+spring:
+  profiles:
+    active: default
+      
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.usl.microservices: DEBUG    

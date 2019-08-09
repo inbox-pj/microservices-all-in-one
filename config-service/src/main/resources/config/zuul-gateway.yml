@@ -1,0 +1,45 @@
+zuul:
+  prefix: /api
+  ignored-services: "*"
+  routes:
+    cart-processing: /cart/**
+    payment-processing: /payment/**
+    payment-validation: /validation/**
+    pricing-service: /pricing/**
+    catalog-service: /catalog/**
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+  ribbon:
+    eager-load:
+      enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+cart-processing:
+  ribbon:
+    ReadTimeout: 20000
+    ConnectTimeout: 20000
+
+payment-processing:
+  ribbon:
+    ReadTimeout: 20000
+    ConnectTimeout: 20000
+    
+payment-validation:
+  ribbon:
+    ReadTimeout: 20000
+    ConnectTimeout: 20000
+    
+pricing-service:
+  ribbon:
+    ReadTimeout: 20000
+    ConnectTimeout: 20000
+
+
