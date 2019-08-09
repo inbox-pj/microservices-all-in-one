@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: payment-validation
+  profiles:
+    active: default
+  cloud:
+    config:
+      enabled: true
+      uri: ${CONFIG_SERVER_URL:http://localhost:8100}
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER_URL:http://localhost:8300}
+        instance:
+          prefer-ip: true
+          service-base-url: ${ADMIN_SERVER_URL:http://localhost:8300}
+          
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8200}/eureka
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    restart:
+      enabled: true
+     

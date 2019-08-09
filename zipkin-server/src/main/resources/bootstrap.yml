@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: zipkin-server
+  profiles:
+    active: default
+  cloud:
+    config:
+      enabled: true
+      uri: ${CONFIG_SERVER_URL:http://localhost:8100}
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER_URL:http://localhost:8300}
+        instance:
+          prefer-ip: true
+          
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8200}/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    restart:
+      enabled: true
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
+
+ribbon:
+  eureka:
+    enabled: true
+  eager-load:
+    enabled: true

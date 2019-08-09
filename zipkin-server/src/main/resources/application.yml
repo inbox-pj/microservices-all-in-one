@@ -1,0 +1,87 @@
+server:
+  port: ${ZIPKIN_SERVER_PORT:9411}
+  use-forward-headers: true
+  compression:
+    enabled: true
+    mime-types: application/json,application/javascript,text/css,image/svg
+    
+armeria:
+  ports:
+    - port: ${server.port}
+      protocols:
+        - http
+  gracefulShutdownQuietPeriodMillis: -1
+  gracefulShutdownTimeoutMillis: -1
+
+zipkin:
+  self-tracing:
+    enabled: ${SELF_TRACING_ENABLED:false}
+    sample-rate: ${SELF_TRACING_SAMPLE_RATE:1.0}
+    traces-per-second: ${SELF_TRACING_TRACES_PER_SECOND:1}
+    message-timeout: ${SELF_TRACING_FLUSH_INTERVAL:1}
+  collector:
+    sample-rate: ${COLLECTOR_SAMPLE_RATE:1.0}
+    http:
+      enabled: ${HTTP_COLLECTOR_ENABLED:true}
+    kafka:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      topic: ${KAFKA_TOPIC:zipkin}
+      group-id: ${KAFKA_GROUP_ID:zipkin}
+      streams: ${KAFKA_STREAMS:1}
+    scribe:
+      enabled: ${SCRIBE_ENABLED:false}
+      category: ${SCRIBE_CATEGORY:zipkin}
+      port: ${COLLECTOR_PORT:9410}
+  query:
+    enabled: ${QUERY_ENABLED:true}
+    lookback: ${QUERY_LOOKBACK:86400000}
+    names-max-age: 300
+    allowed-origins: "*"
+
+  storage:
+    strict-trace-id: ${STRICT_TRACE_ID:true}
+    search-enabled: ${SEARCH_ENABLED:true}
+    autocomplete-keys: ${AUTOCOMPLETE_KEYS:}
+    autocomplete-ttl: ${AUTOCOMPLETE_TTL:3600000}
+    autocomplete-cardinality: 20000
+    type: ${STORAGE_TYPE:mem}
+    throttle:
+      enabled: ${STORAGE_THROTTLE_ENABLED:false}
+      min-concurrency: ${STORAGE_THROTTLE_MIN_CONCURRENCY:10}
+      max-concurrency: ${STORAGE_THROTTLE_MAX_CONCURRENCY:200}
+      max-queue-size: ${STORAGE_THROTTLE_MAX_QUEUE_SIZE:1000}
+    mem:
+      max-spans: 500000
+    elasticsearch:
+    mysql:
+      jdbc-url: ${MYSQL_JDBC_URL:}
+      host: ${MYSQL_HOST:localhost}
+      port: ${MYSQL_TCP_PORT:3306}
+      username: ${MYSQL_USER:}
+      password: ${MYSQL_PASS:}
+      db: ${MYSQL_DB:zipkin}
+      max-active: ${MYSQL_MAX_CONNECTIONS:10}
+      use-ssl: ${MYSQL_USE_SSL:false}
+  ui:
+    enabled: ${QUERY_ENABLED:true}
+    query-limit: 10
+    environment:
+    default-lookback: 3600000
+    search-enabled: ${SEARCH_ENABLED:true}
+    instrumented: .*
+    base-path: /zipkin
+    suggest-lens: true
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+      - org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration
+  main:
+    web-application-type: none
+logging:
+  pattern:
+    level: "%clr(%5p) %clr([%X{traceId}/%X{spanId}]){yellow}"
+  level:
+    com.facebook.swift.service.ThriftServiceProcessor: 'OFF'
