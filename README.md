@@ -3,7 +3,7 @@ Springboot Microservices along with Admin Server, Config Service, Discovery Serv
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-# Components!
+## Components!
  * Spring boot Microservices for Shopping Cart applications enabling Swagger UI
  * Configuration Management with Spring Cloud Config
  * Service registration and discovery
@@ -22,7 +22,7 @@ Springboot Microservices along with Admin Server, Config Service, Discovery Serv
  * Custom/Standard Zipkin Server
  * Hystrix Dashboard
 
-### URL to monitor
+## URL to monitor
 * [Swagger UI] -		http://<host>:<port>/swagger-ui.html
 * [Hystrix Dashboard] -	http://<host>:<port>/hystrix
 * [Hystrix Monitor] -	http://<host>:<port>/actuator/hystrix.stream
@@ -34,8 +34,8 @@ Springboot Microservices along with Admin Server, Config Service, Discovery Serv
 * [Trace] -				http://<host>:<port>/actuator/trace
 * [Zuul Route] -		http://<host>:<port>/actuator/routes
 
-### Configurations
-* Ribbon Timeout
+## Configurations
+### Ribbon Timeout
 ```sh
 ribbonTimeout = (ribbon.ConnectTimeout + ribbon.ReadTimeout) * (ribbon.MaxAutoRetries + 1) * (ribbon.MaxAutoRetriesNextServer + 1);
 if(hystrixTimeout < ribbonTimeout) {
@@ -53,7 +53,7 @@ zuul.host.max-total-connections – The maximum number of total connections the 
 zuul.host.time-to-live – The lifetime for the connection pool. Default: -1.
 ```
 
-# To Register with Eureka (spring-cloud-starter-netflix-eureka-client)
+### To Register with Eureka (spring-cloud-starter-netflix-eureka-client)
 ```sh
 #eureka:
 #  instance:
@@ -64,7 +64,7 @@ zuul.host.time-to-live – The lifetime for the connection pool. Default: -1.
 #    serviceUrl: 
 #      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8200}/eureka
 ```
-# To Register with Admin Server (spring-boot-admin-starter-client)
+### To Register with Admin Server (spring-boot-admin-starter-client)
 ```sh
 #  boot:
 #    admin:
@@ -73,31 +73,31 @@ zuul.host.time-to-live – The lifetime for the connection pool. Default: -1.
 #        instance:
 #          prefer-ip: true
 ```
-### MYSQL Server
+## MYSQL Server
 https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
 ```sh
 mysql -u [username] -p
 ```
 
-# Kafka/Zookeeper
+## Kafka/Zookeeper
 ```sh
 cd /opt/Kafka-zkServer/kafka_2.11/bin
 sh zookeeper-server-start.sh ../config/zookeeper.properties
 sh kafka-server-start.sh ../config/server.properties
 ```
 
-### Redis Server
+## Redis Server
 ```sh
 /opt/redis-5.0.5/src
 redis-server
 ```
 
-### Redis Server (external software only)
+## Zipkin Server (external software only)
 ```sh
 https://github.com/openzipkin/zipkin/tree/master/zipkin-server
 ```
 
-### Port Configurations
+## Port Configurations
 * Config Service - [8100]
 * Discovery Service - [8200] - <http://localhost:8200/>
 * Admin Server - [8300] - <http://localhost:8300/#/wallboard>
@@ -112,14 +112,14 @@ https://github.com/openzipkin/zipkin/tree/master/zipkin-server
 * Payment Processingg - [8900]
 * Cart Processing - [9100]
 
-### Todos
+## Todos
 The repository doesn't include below topics related to Microservices. Will be part of seperate repository:
  - CQRS
  - Spring Security
  - Transaction Management
  - Docker
 
-### Reference
+## Reference
 
 https://spring.io/guides/gs/service-registration-and-discovery/
 https://spring.io/guides/gs/accessing-data-jpa/
