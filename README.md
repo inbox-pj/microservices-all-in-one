@@ -53,6 +53,87 @@ zuul.host.max-total-connections – The maximum number of total connections the 
 zuul.host.time-to-live – The lifetime for the connection pool. Default: -1.
 ```
 
+## Scenario 1
+Hystrix is disabled for th Feign client (1). The auto-retry mechanism is disabled for the Ribbon client on the local instance (2) and other instances (3). Ribbon read timeout is shorter than request max process time (4). This scenario also occurs with the default Spring Cloud configuration without Hystrix. When you call the customer test method, you sometimes receive a full response and sometimes 500 HTTP error code (50/50).
+```
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 0 #(2)
+  MaxAutoRetriesNextServer: 0 #(3)
+  ReadTimeout: 1000 #(4)
+feign:
+  hystrix:
+    enabled: false #(1)
+```
+
+## Scenario 2
+Hystrix is still disabled for the Feign client (1). The auto-retry mechanism is disabled for the Ribbon client on the local instance (2) but enabled on other instances once (3). You always receive a full response. If your request is received with a delayed response, it is timed out after one second and then Ribbon calls another instance — in that case, not delayed. You can always change MaxAutoRetries to positive value, but that gives us nothing in this sample.
+```
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 0 #(2)
+  MaxAutoRetriesNextServer: 1 #(3)
+  ReadTimeout: 1000 #(4)
+feign:
+  hystrix:
+    enabled: false #(1)
+```
+
+## Scenario 3
+Here is not a very elegant solution to the problem. We set ReadTimeout on a value bigger than the delay inside the API method (5000 ms).
+```
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 0
+  ReadTimeout: 10000
+feign:
+  hystrix:
+    enabled: false
+```
+Generally, the configuration from Scenario 2 and 3 is right. You always get the full response. But in some cases, you will wait more than one second (Scenario 2) or more than five seconds (Scenario 3). The delayed instance receives 50% requests from the Ribbon client. But fortunately, there is Hystrix — circuit breaker.
+
+## Scenario 4
+Let’s enable Hystrix just by removing the feign property. There are no auto retries for Ribbon client (1) and its read timeout (2) is bigger than Hystrix’s timeout (3). 1000ms is also the default value for Hystrix timeoutInMilliseconds property. Hystrix circuit breaker and fallback will work for delayed instances of account service. For some first requests, you receive a fallback response from Hystrix. Then, the delayed instance will be cut off from requests. Most of them will be directed to a not-delayed instance.
+```
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 0 #(1)
+  MaxAutoRetriesNextServer: 0
+  ReadTimeout: 2000 #(2)
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000 #(3)
+```
+
+## Scenario 5
+This scenario is a more advanced development of Scenario 4. Now, Ribbon timeout (2) is lower than Hystrix timeout (3) and also auto retries mechanism is enabled (1) for local instance and for other instances (4). The result is same as for Scenario 2 and 3: you receive a full response, but Hystrix is enabled and it cuts off delayed instance from future requests.
+```
+
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 3 #(1)
+  MaxAutoRetriesNextServer: 1 #(4)
+  ReadTimeout: 1000 #(2)
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000 #(3)
+```
+
+
 ### To Register with Eureka (spring-cloud-starter-netflix-eureka-client)
 ```sh
 #eureka:
