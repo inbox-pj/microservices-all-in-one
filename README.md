@@ -2,7 +2,7 @@
 Springboot Microservices along with Admin Server, Config Service, Discovery Service, Hystrix, Zuul Gateway, Zipkin, Kafka, Redis with mysql
 
 # This repo belongs to older version of the spring and non-active tools like Ribbon etc. please use below GitHub repo for latest trend and patterns:
-[https://github.com/eazybytes/microservices](https://github.com/inbox-pj/cloud-native-microservice/tree/main)
+https://github.com/inbox-pj/cloud-native-microservice/
 
 
 
